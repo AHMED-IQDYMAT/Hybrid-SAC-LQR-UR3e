@@ -37,7 +37,6 @@ Hybrid-SAC-LQR-UR3e/
 │   ├── TargetScheduler.m
 │   ├── DeltaThetaToCmd.m
 │   └── UR3eResetFcn.m
-│
 ├── simulink/
 │   └── RL_UR3e_Pick_and_Place_Traj.slx
 │
