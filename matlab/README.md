@@ -49,3 +49,8 @@ Hybrid-SAC-LQR-UR3e/
 │
 ├── README.md
 └── LICENSE
+Hybrid-SAC-LQR-UR3e/
+│
+├── Videos/
+│   ├── UR3e_PickPlace_Task.mp4
+│   └── Figure_UR3e_Trajectory_Video.mp4
