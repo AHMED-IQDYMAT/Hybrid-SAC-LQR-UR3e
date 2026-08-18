@@ -1,22 +1,56 @@
-# MATLAB and Simulink files
+# Hybrid SAC-LQR Control for UR3e Pick-and-Place
 
-This folder contains the public core implementation of the UR3e Hybrid SAC–LQR simulation.
+This repository contains the MATLAB/Simulink implementation files for a hybrid Soft Actor-Critic (SAC) and Linear Quadratic Regulator (LQR) control framework applied to a UR3e pick-and-place task.
 
-## Main entry points
+## Project Overview
 
-- `TrainSACAgentForPickAndPlaceTraj.m`: constructs the reported SAC network configuration and starts a new training run.
-- `EvaluateAndAnalyzeAgents.m`: evaluates a user-supplied trained agent using the nominal protocol.
-- `RL_UR3e_Pick_and_Place_Traj.slx`: complete MATLAB/Simulink Hybrid SAC–LQR model.
+The framework combines:
 
-## Supporting modules
+- SAC outer-loop policy for trajectory-level adaptation
+- Per-joint LQR inner-loop controllers for joint-level stabilization
+- Incremental joint-space action representation
+- Four-phase pick-and-place curriculum
+- MATLAB/Simulink training environment
+- ROS 2 / URSim sim-to-sim validation workflow
 
-- `UR3_Model.m`: UR3e kinematics and joint limits.
-- `SolveForwardKinematics.m`: standalone forward kinematics.
-- `LQR_Gains.m`: per-joint LQR design and Simulink workspace parameters.
-- `Reward.m`: waypoint reward calculation.
-- `Observation.m`: 27-dimensional observation construction.
-- `TargetScheduler.m`: four-phase waypoint scheduler.
-- `DeltaThetaToCmd.m`: incremental-action to absolute-reference conversion.
-- `UR3eResetFcn.m`: randomised initial joint configuration.
+## Main Requirements
 
-The trained policy, checkpoints, raw run folders, robustness-injection code, conventional-baseline models, and ROS 2 terminal-assistance implementation are not included in the public repository.
+- MATLAB R2024b
+- Simulink
+- Reinforcement Learning Toolbox
+- Control System Toolbox
+- Deep Learning Toolbox
+- ROS Toolbox
+
+## Repository Structure
+
+```text
+Hybrid-SAC-LQR-UR3e/
+│
+├── matlab/
+│   ├── UR3_Model.m
+│   ├── SolveForwardKinematics.m
+│   ├── LQR_Gains.m
+│   ├── TrainSACAgentForPickAndPlaceTraj.m
+│   ├── Reward.m
+│   ├── Observation.m
+│   ├── TargetScheduler.m
+│   ├── DeltaThetaToCmd.m
+│   └── UR3eResetFcn.m
+│   └── evaluation script
+├── simulink/
+│   └── RL_UR3e_Pick_and_Place_Traj.slx
+│
+├── docs/
+│   └── setup_notes.md
+│
+├── examples/
+│   └── run_example.md
+│
+├── README.md
+└── LICENSE
+Hybrid-SAC-LQR-UR3e/
+│
+├── Videos/
+│   ├── UR3e_PickPlace_Task.mp4
+│   └── Figure_UR3e_Trajectory_Video.mp4

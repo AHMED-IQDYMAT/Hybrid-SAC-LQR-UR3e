@@ -1,24 +1,14 @@
-Copyright (c) 2026 Ahmed Iqdymat. All rights reserved.
+Copyright (c) 2026 Ahmed Iqdymat
 
-This repository and all source code, models, documentation, data, media,
-and other materials contained in it are proprietary and are not released
-under an open-source license.
+Permission is granted to use, copy, modify, and distribute this software and associated documentation files for academic, research, and educational purposes only, provided that proper attribution is given to the original author.
 
-No permission is granted to use, copy, modify, adapt, merge, publish,
-distribute, sublicense, sell, incorporate into another work, or create
-derivative works from any part of this repository, whether for commercial,
-academic, research, educational, or other purposes, without prior written
-permission from the copyright holder.
+Commercial use of this software or any part of its contents is prohibited without prior written permission from the author.
 
-Public availability of this repository is provided solely for inspection
-and verification of the associated research. Citation of the associated
-publication does not grant permission to reuse the repository contents.
+The software is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and noninfringement. In no event shall the author be liable for any claim, damages, or other liability arising from the use of the software.
 
-Requests for permission must be directed to:
-Ahmed Iqdymat <ahmed.iqdymat@stud.upb.ro>
-
-THE MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING
-FROM, OUT OF, OR IN CONNECTION WITH THE MATERIALS OR THEIR USE.
+Author:
+Ahmed Iqdymat
+University Politehnica of Bucharest
+Faculty of Automatic Control and Computers
+Department of Automation and Industrial Informatics
+Supervisor: Dr. Grigore Stamatescu

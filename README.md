@@ -1,115 +1,109 @@
-# Hybrid SAC–LQR Control for UR3e Multi-Waypoint Motion
+# Hybrid SAC-LQR Control for UR3e Pick-and-Place
 
-Public technical repository accompanying the manuscript:
+This repository contains the MATLAB/Simulink implementation files for a hybrid Soft Actor-Critic (SAC) and Linear Quadratic Regulator (LQR) control framework applied to a UR3e pick-and-place task.
 
-> A Reinforcement-Learning-Based Hybrid SAC–LQR Framework for UR3e Multi-Waypoint Motion: System Design and Simulation-Based Evaluation
+## Project Overview
 
-The framework uses a Soft Actor–Critic (SAC) outer loop to generate bounded incremental joint-reference corrections every 50 ms. Six independent per-joint LQR loops track the resulting references at a 5 ms simulation step.
+The framework combines:
 
-## Evaluation scope
+- SAC outer-loop policy for trajectory-level adaptation
+- Per-joint LQR inner-loop controllers for joint-level stabilization
+- Incremental joint-space action representation
+- Four-phase pick-and-place curriculum
+- MATLAB/Simulink training environment
+- ROS 2 / URSim sim-to-sim validation workflow
 
-Two evaluation stages are distinguished:
-
-- **Complete MATLAB/Simulink Hybrid SAC–LQR evaluation:** includes the SAC decision layer, joint-reference conversion, six LQR loops, and the simplified per-axis plant.
-- **Adapted MATLAB–ROS 2 controller-pipeline evaluation:** uses the trained SAC decision layer, task logic, `ros2_control`, and `use_fake_hardware=true`. It does not execute the Simulink plant or the LQR inner loops.
-
-Neither stage constitutes physical UR3e validation.
-
-## Public repository scope
-
-This repository intentionally contains only the core MATLAB/Simulink implementation, setup notes, demonstration videos, and aggregate evaluation results. It does not include trained agents, checkpoints, raw per-episode outputs, offline reference banks, terminal-assistance configurations, internal robustness-injection code, manuscripts, or reviewer-response files.
-
-## Requirements
+## Main Requirements
 
 - MATLAB R2024b
 - Simulink
 - Reinforcement Learning Toolbox
 - Control System Toolbox
 - Deep Learning Toolbox
-- ROS Toolbox for the separate ROS 2 workflow
+- ROS Toolbox
 
-## Repository structure
+## Repository Structure
 
 ```text
 Hybrid-SAC-LQR-UR3e/
+│
 ├── matlab/
-│   ├── RL_UR3e_Pick_and_Place_Traj.slx
-│   ├── TrainSACAgentForPickAndPlaceTraj.m
-│   ├── EvaluateAndAnalyzeAgents.m
 │   ├── UR3_Model.m
 │   ├── SolveForwardKinematics.m
 │   ├── LQR_Gains.m
+│   ├── TrainSACAgentForPickAndPlaceTraj.m
 │   ├── Reward.m
 │   ├── Observation.m
 │   ├── TargetScheduler.m
 │   ├── DeltaThetaToCmd.m
 │   └── UR3eResetFcn.m
-├── results/
-│   └── EVALUATION_SUMMARY.md
+│
+├── simulink/
+│   └── RL_UR3e_Pick_and_Place_Traj.slx
+│
 ├── docs/
 │   └── setup_notes.md
+│
 ├── examples/
 │   └── run_example.md
+│
 ├── Videos/
+│   ├── UR3e_PickPlace_Task.mp4
+│   └── Figure_UR3e_Trajectory_Video.mp4
+│
+├── results/
+│   └── UR3e_Training_Evaluation_Logs.xlsx
+│
 ├── README.md
 └── LICENSE
 ```
 
-## Main configuration
+## Main Files
 
-- Four phases: PICK, LIFT, CRUISE, PLACE
-- Waypoints [mm]: PICK `[-380, -170, 120]`, LIFT `[-380, -170, 180]`, CRUISE `[-290, -110, 265]`, PLACE `[-200, -50, 300]`
-- Observation dimension: 27
-- Action dimension: 6
-- SAC decision period: 50 ms
-- LQR/simulation period: 5 ms
-- Episode horizon: 15 s
-- Terminal phase tolerance: 8 mm
-- Strict full-task success criterion: PLACE distance below 5 mm
+- `TrainSACAgentForPickAndPlaceTraj.m`: main SAC training script.
+- `UR3_Model.m`: UR3e kinematic model and joint limits.
+- `LQR_Gains.m`: per-joint LQR gain computation.
+- `Reward.m`: reward function used during SAC training.
+- `Observation.m`: 27-dimensional observation vector.
+- `TargetScheduler.m`: four-phase pick-and-place scheduler.
+- `DeltaThetaToCmd.m`: converts incremental actions to absolute joint commands.
+- `SolveForwardKinematics.m`: UR3e forward kinematics.
+- `UR3eResetFcn.m`: randomized episode reset function.
 
-The training script exposes the actor, twin-critic, replay-buffer, optimiser, and entropy settings reported in the manuscript. The trained policy used for the reported experiments is not distributed.
+## Demonstration Videos
 
-## Aggregate results
+### UR3e Pick-and-Place Task
 
-| Evaluation | Full-task result |
-|---|---:|
-| Nominal Hybrid SAC–LQR | 96% (48/50) |
-| Frozen-policy robustness/generalisation tests | 82–100% |
-| Matched offline-trajectory LQR | 100% (50/50) |
-| Matched offline-trajectory PID | 100% (50/50) |
-| Conventional IK–trajectory–LQR | 100% (50/50) |
-| ROS 2 controller pipeline, terminal assistance enabled | 96% (48/50) |
-| ROS 2 controller pipeline, terminal assistance disabled | 0% (0/50) |
+[View Video](Videos/UR3e_PickPlace_Task.mp4)
 
-The nominal `4.221 ± 0.381 mm` value is the Cartesian distance recorded at first entry into the strict 5 mm PLACE region for successful episodes. It is not a sustained-placement or settling metric. See [`results/EVALUATION_SUMMARY.md`](results/EVALUATION_SUMMARY.md) for the aggregate tables and scope notes.
+### UR3e End-Effector Trajectory
 
-## Basic use
+[View Video](Videos/Figure_UR3e_Trajectory_Video.mp4)
 
-```matlab
-addpath(genpath(pwd));
-UR3_Model;
-LQR_Gains;
-open_system('RL_UR3e_Pick_and_Place_Traj.slx');
+## Training and Evaluation Logs
+
+The organized training and evaluation logs are provided in:
+
+```text
+results/UR3e_Training_Evaluation_Logs.xlsx
 ```
 
-To construct and train a new SAC agent using the public configuration:
+## Notes
 
-```matlab
-TrainSACAgentForPickAndPlaceTraj
-```
+Large training checkpoints, temporary files, generated cache folders, and full raw run directories are not included in this repository.
 
-Training a new agent will not reproduce the archived policy bit-for-bit because SAC training is stochastic and the reported study retained one completed training run.
+## Associated Manuscript
+
+Hybrid SAC-LQR Control for High-Precision Pick-and-Place on the UR3e: A Sim-to-Sim Validation Framework.
 
 ## Authors
 
-- Ahmed Iqdymat
-- Iulia Stamatescu
-- Grigore Stamatescu
-
-Department of Automation and Industrial Informatics, National University of Science and Technology Politehnica of Bucharest.
+Ahmed Iqdymat  
+Supervisor: Dr. Grigore Stamatescu  
+University Politehnica of Bucharest  
+Faculty of Automatic Control and Computers  
+Department of Automation and Industrial Informatics
 
 ## License
 
-Copyright (c) 2026 Ahmed Iqdymat. All rights reserved. This repository is
-publicly viewable for research inspection and verification, but it is not
-open source and no reuse permission is granted. See [`LICENSE`](LICENSE).
+This repository is provided for academic, research, and educational purposes only. See the `LICENSE` file for details.
