@@ -24,6 +24,7 @@ minSafeDist_mm = 150.0;
 maxAttempts    = 100;
 
 theta_init = zeros(1,6);
+found_safe = false;
 
 for attempt = 1:maxAttempts
 
@@ -34,8 +35,17 @@ for attempt = 1:maxAttempts
 
     if dist_to_pick > minSafeDist_mm
         theta_init = theta_try;
+        found_safe = true;
         break
     end
+end
+
+if ~found_safe
+    theta_init = theta_try;
+    warning(['UR3eResetFcn: no initial configuration exceeded the ', ...
+             '%.0f mm PICK safety distance after %d attempts; ', ...
+             'using the final sample (distance %.1f mm).'], ...
+             minSafeDist_mm, maxAttempts, dist_to_pick);
 end
 
 in = setVariable(in, 'InitTheta_1', theta_init(1));
