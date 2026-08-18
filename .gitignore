@@ -1,0 +1,40 @@
+# MATLAB and Simulink generated files
+slprj/
+*.slxc
+*.asv
+*.autosave
+*.m~
+
+# Trained policies, checkpoints, and private run folders
+Runs/
+**/chk/
+**/checkpoints/
+**/finalAgent*.mat
+**/bestAgent*.mat
+**/trainedAgent*.mat
+
+# Raw or high-volume experiment outputs
+results/raw/
+results/*.xlsx
+results/**/*.xlsx
+results/**/*.csv
+results/**/*.mat
+**/episodes/
+**/timeseries/
+
+# Private experiment implementations
+baselines/
+robustness/
+ros2_pipeline/
+post_entry/
+**/Matched_Offline_Reference_Bank*.mat
+**/TerminalThetaAssist*.m
+
+# Manuscript and peer-review materials
+manuscript/
+papers/
+review/
+response_to_reviewers/
+*.docx
+*Response_to_Reviewers*
+*Review Report*

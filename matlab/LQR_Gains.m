@@ -68,17 +68,26 @@ b = [ ...
     0.40;
     0.25;
     0.20;
-    0.12 ];
+    0.17 ];
 
 %% -------------------------------------------------------------------------
-% 5) LQR weighting matrices
+% 5) Feedback-channel scale factors used by the Simulink model
 % -------------------------------------------------------------------------
 
-Q = diag([300, 900, 30, 1]);     % State weighting matrix
-R_lqr = 0.05;                    % Control weighting scalar
+Z_SCALE         = Ts_sim;
+OMEGA_SCALE_J13 = 1 / pi;
+OMEGA_SCALE_J46 = 1 / (2*pi);
+I_SCALE         = 1 / I_max;
 
 %% -------------------------------------------------------------------------
-% 6) Per-joint LQR computation
+% 6) LQR weighting matrices
+% -------------------------------------------------------------------------
+
+Q = diag([50, 200, 5, 0.1]);     % State weighting matrix
+R_lqr = 0.1;                     % Control weighting scalar
+
+%% -------------------------------------------------------------------------
+% 7) Per-joint LQR computation
 % -------------------------------------------------------------------------
 
 K_lqr = zeros(6,4);
@@ -97,7 +106,7 @@ for j = 1:6
 end
 
 %% -------------------------------------------------------------------------
-% 7) Export variables to MATLAB base workspace
+% 8) Export variables to MATLAB base workspace
 % -------------------------------------------------------------------------
 
 assignin('base','Ts_sim',   Ts_sim);
@@ -108,14 +117,28 @@ assignin('base','MaxSteps', MaxSteps);
 assignin('base','V_max', V_max);
 assignin('base','I_max', I_max);
 
+assignin('base','GR', GR);
+assignin('base','Kt', Kt);
+assignin('base','Ke', Ke);
+assignin('base','R',  R);
+assignin('base','L',  L);
+assignin('base','Im', Im);
+
+assignin('base','Z_SCALE',         Z_SCALE);
+assignin('base','OMEGA_SCALE_J13', OMEGA_SCALE_J13);
+assignin('base','OMEGA_SCALE_J46', OMEGA_SCALE_J46);
+assignin('base','I_SCALE',         I_SCALE);
+
 assignin('base','K_lqr', K_lqr);
 
 for j = 1:6
+    assignin('base', sprintf('J%d', j), J(j));
+    assignin('base', sprintf('b%d', j), b(j));
     assignin('base', sprintf('K%d', j), K_lqr(j,:));
 end
 
 %% -------------------------------------------------------------------------
-% 8) Display summary
+% 9) Display summary
 % -------------------------------------------------------------------------
 
 disp('Per-joint LQR gains:');
