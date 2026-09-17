@@ -1,5 +1,7 @@
 # Hybrid SAC–LQR Control for UR3e Multi-Waypoint Motion
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22817235.svg)](https://doi.org/10.5281/zenodo.22817235)
+
 Public technical repository accompanying the manuscript:
 
 > A Reinforcement-Learning-Based Hybrid SAC–LQR Framework for UR3e Multi-Waypoint Motion: System Design and Simulation-Based Evaluation
